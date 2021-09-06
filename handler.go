@@ -59,13 +59,14 @@ func httpResponseFromErr(respErr responseError) (*http.Response, error) {
 		return nil, err
 	}
 
-	var httpResp *http.Response
-
+	httpResp := new(http.Response)
 	httpResp.StatusCode = respErr.StatusCode()
 
 	contentType := respErr.ContentType()
 	if len(contentType) > 0 {
-		httpResp.Header["Content-Type"] = contentType
+		httpResp.Header = http.Header{
+			"Content-Type": contentType,
+		}
 	}
 
 	if rawBody != nil {
